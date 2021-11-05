@@ -1,3 +1,7 @@
+body {
+  background: rgb(45, 8, 255);
+}
+
 #main_canvas {
   position: absolute;
   top: 50%;

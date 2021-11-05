@@ -1,9 +1,9 @@
 const canvas = document.getElementById("main_canvas");
 const ctx = canvas.getContext("2d");
+const CANVAS_WIDTH = (canvas.width = 1000);
+const CANVAS_HEIGHT = (canvas.height = 500);
+const key = []; //pressed key when key pressed it will be stored here and on keyup event the stored value will be deleted. refer to the keyup and key down events methods
 
-const CANVAS_WIDTH = (canvas.width = 590);
-const CANVAS_HEIGHT = (canvas.height = 290);
-const key = [];
 const backgroundImg = new Image();
 backgroundImg.src = "./Assets/Rock_Tile_Map.png";
 const playerImg = new Image();
@@ -11,7 +11,7 @@ playerImg.src = "./Assets/Minotaur - Sprite Sheet_ready.png";
 
 const player = {
   initialX: 0,
-  initialY: 176,
+  initialY: CANVAS_HEIGHT - 155,
   height: 96,
   width: 96,
   frameX: 0,
@@ -33,18 +33,19 @@ function drawPlayer() {
     player.height
   );
 }
-//ArrowRight;//ArrowLeft
 function movePlayer() {
   if (key["ArrowRight"] && player.initialX < CANVAS_WIDTH - 60) {
     player.initialX += player.speed;
     player.frameY = 1;
-  } else if (key["ArrowLeft"] && player.initialX > 0) {
+  } else if (key["ArrowLeft"] && player.initialX >= 0) {
     player.initialX -= player.speed;
     player.frameY = 9;
   } else if (key[" "]) {
     player.frameY = 3;
   }
 }
+
+//   Control the x and y for the player frames
 function handleAnimation() {
   if (player.moving == false) {
     if (player.frameX < 4) {
@@ -58,26 +59,7 @@ function handleAnimation() {
   }
 }
 
-window.addEventListener("keydown", (e) => {
-  key[e.key] = true;
-  player.moving = true;
-  console.log(key);
-});
-window.addEventListener("keyup", (e) => {
-  delete key[e.key];
-  player.moving = false;
-});
-
-// function animation() {
-//   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-//   ctx.drawImage(backgroundImg, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-//   drawPlayer();
-//   movePlayer();
-//   handleAnimation();
-//   requestAnimationFrame(animation);
-// }
-// animation();
-
+/////////////  -----> This section to control the client fbs <------ /////////////////////////////
 let fbs, fbsInterval, startTime, now, then, elapsed;
 
 function startAnimating(fbs) {
@@ -100,4 +82,28 @@ function animate() {
     handleAnimation();
   }
 }
-startAnimating(20);
+/////////////^^  -----> This section to control the client fbs <------ ^^/////////////////////////////
+
+//    Events Listener methods
+window.addEventListener("load", () => {
+  startAnimating(20);
+});
+window.addEventListener("keydown", (e) => {
+  key[e.key] = true;
+  player.moving = true;
+  console.log(key);
+});
+window.addEventListener("keyup", (e) => {
+  delete key[e.key];
+  player.moving = false;
+});
+
+// function animation() {
+//   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+//   ctx.drawImage(backgroundImg, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+//   drawPlayer();
+//   movePlayer();
+//   handleAnimation();
+//   requestAnimationFrame(animation);
+// }
+// animation();
